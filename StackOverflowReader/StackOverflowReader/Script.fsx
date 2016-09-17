@@ -34,3 +34,6 @@ let rdf =
       "Education", box education ]
     |> namedParams
     |> R.data_frame 
+
+rdf |> R.plot
+rdf |> R.summary |> R.print
