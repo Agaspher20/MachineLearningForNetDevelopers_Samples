@@ -55,10 +55,15 @@
     <Content Include="packages.config" />
     <None Include="DeedlePlayground.fsx" />
     <None Include="TypeProvidersPlayground.fsx" />
+    <None Include="WorldMap.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Deedle">
       <HintPath>..\packages\Deedle.1.2.5\lib\net40\Deedle.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Deedle.RProvider.Plugin">
+      <HintPath>..\packages\Deedle.RPlugin.1.2.5\lib\net40\Deedle.RProvider.Plugin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DynamicInterop">
@@ -74,7 +79,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="RDotNet">
-      <HintPath>..\packages\R.NET.Community.1.6.5\lib\net40\RDotNet.dll</HintPath>
+      <HintPath>..\packages\R.NET.1.5.5\lib\net40\RDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RDotNet.FSharp">
@@ -82,7 +87,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="RDotNet.NativeLibrary">
-      <HintPath>..\packages\R.NET.Community.1.6.5\lib\net40\RDotNet.NativeLibrary.dll</HintPath>
+      <HintPath>..\packages\R.NET.1.5.5\lib\net40\RDotNet.NativeLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RProvider">
