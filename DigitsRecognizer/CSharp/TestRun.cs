@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.IO;
 
 namespace CSharp
 {
@@ -7,17 +7,14 @@ namespace CSharp
     {
         public static void Run()
         {
-            var trainingPath = @"C:\Users\Михаил\Documents\"
-                            + @"Visual Studio 2015\Projects\"
-                            + @"DigitsRecognizer\data\trainingsample.csv";
+            var dataLocation = Directory.GetCurrentDirectory() + @"\..\..\..\data\";
+            var trainingPath = dataLocation + "trainingsample.csv";
             Trace.WriteLine("Reading training set");
             var training = DataReader.ReadObservations(trainingPath);
             Trace.WriteLine($"Training set read. We have {training.Length} images.");
 
             Trace.WriteLine("Training finished.");
-            var validationPath = @"C:\Users\Михаил\Documents\"
-                            + @"Visual Studio 2015\Projects\"
-                            + @"DigitsRecognizer\data\validationsample.csv";
+            var validationPath = dataLocation + "validationsample.csv";
             Trace.WriteLine("Reading validation set");
             var validation = DataReader.ReadObservations(validationPath);
             Trace.WriteLine($"Validation set read. We have {validation.Length} images.");
