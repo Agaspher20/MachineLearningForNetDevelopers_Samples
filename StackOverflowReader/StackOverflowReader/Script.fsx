@@ -1,68 +1,36 @@
 ﻿#I @"..\packages\"
+
 #r @"FSharp.Data.2.3.2\lib\net40\FSharp.Data.dll"
-#load "Library1.fs"
-open StackOverflowReader
 
-open FSharp.Data 
+#r @"R.NET.Community.1.6.5\lib\net40\RDotNet.dll"
+#r @"RProvider.1.1.20\lib\net40\RProvider.Runtime.dll"
+#r @"RProvider.1.1.20\lib\net40\RProvider.dll" 
 
-[<Literal>]
-let stackOverflowPath = """http://api.stackexchange.com/2.2/questions?site=stackoverflow"""
+open FSharp.Data
+open RProvider
+open RProvider.``base``
+open RProvider.graphics
 
-let csQuestionsPath = stackOverflowPath + """&order=desc&sort=activity&tagged=CS"""
-type Questions = JsonProvider<stackOverflowPath>
+let wb = WorldBankData.GetDataContext()
+let countries = wb.Countries
+let pop2000 = [for c in countries -> c.Indicators.``Population, total``.[2000]]
+let pop2010 = [for c in countries -> c.Indicators.``Population, total``.[2010]]
+let surface = [for c in countries -> c.Indicators.``Surface area (sq. km)``.[2010]]
+R.summary(surface) |> R.print
+R.hist(surface |> Seq.map log)
+R.hist(surface |> R.log)
+R.plot(surface, pop2010)
 
-Questions.Load(csQuestionsPath).Items |> Seq.iter (fun q -> printfn "%s" q.Title)
-[<Literal>]
-let sample = """
-    {
-        "items": [
-            {
-                "tags":["java","arrays"],
-                "owner": ""
-            },
-            {
-                "tags":["javascript","jquery","html"],
-                "owner": ""
-            }],
-        "has_more":true,
-        "quota_max":300,
-        "quota_remaining":299
-    }""" 
-let javaQuestionsPath = stackOverflowPath + """&order=desc&sort=activity&tagged=java"""
-
-type HardCodedQuestions = JsonProvider<sample>
-
-let tagged tags query =
-    // join the tags in a ; separated string
-    let joinedTags = tags |> String.concat ";"
-    sprintf "%s&tagged=%s" query joinedTags 
-let page p query = sprintf "%s&page=%i" query p 
-let pageSize s query = sprintf "%s&pagesize=%i" query s 
-let extractQuestions (query:string) = Questions.Load(query).Items
-
-let CS = "C%23"
-let FS = "F%23"
-
-let fsSample =
-    stackOverflowPath
-    |> tagged [FS]
-    |> pageSize 100
-    |> extractQuestions
-
-let csSample =
-    stackOverflowPath
-    |> tagged [CS]
-    |> pageSize 100
-    |> extractQuestions
-
-
-let analyzeTags (qs:Questions.Item seq) =
-    qs
-    |> Seq.collect (fun question -> question.Tags)
-    |> Seq.countBy id
-    |> Seq.filter (fun (_,count) -> count > 2)
-    |> Seq.sortBy (fun (_,count) -> -count)
-    |> Seq.iter (fun (tag,count) -> printfn "%s,%i" tag count)
-
-analyzeTags fsSample
-analyzeTags csSample
+let pollution =
+    [for c in countries -> c.Indicators.``CO2 emissions (kt)``.[2000]]
+let education =
+    [for c in countries ->
+        c.Indicators.``School enrollment, secondary (gross), gender parity index (GPI)``.[2000]] 
+let rdf =
+    [ "Pop2000", box pop2000
+      "Pop2010", box pop2010
+      "Surface", box surface 
+      "Pollution", box pollution
+      "Education", box education ]
+    |> namedParams
+    |> R.data_frame 
