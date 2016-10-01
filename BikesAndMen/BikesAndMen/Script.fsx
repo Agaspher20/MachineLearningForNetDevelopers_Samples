@@ -1,8 +1,10 @@
-﻿// Learn more about F# at http://fsharp.org. See the 'F# Tutorial' project
-// for more guidance on F# programming.
+﻿#I @"..\packages\"
+#r @"FSharp.Data.2.3.2\lib\net40\FSharp.Data.dll" 
 
-#load "Library1.fs"
-open BikesAndMen
+open FSharp.Data
 
-// Define your library scripting code here
-
+[<Literal>]
+let dataPath = __SOURCE_DIRECTORY__ + @"..\..\data\day.csv"
+type Data = CsvProvider<dataPath>
+let dataSet = Data.Load(dataPath)
+let data = dataSet.Rows
