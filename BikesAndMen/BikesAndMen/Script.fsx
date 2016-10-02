@@ -35,7 +35,9 @@ type Observation = Data.Row
 let model (theta0, theta1) (obs:Observation) = 
     theta0 + theta1 * (float obs.Instant)
 
-let model0 = model (4504., 0.)
+let seriesAverage = data |> Seq.averageBy (fun x -> float x.Cnt)
+
+let model0 = model (seriesAverage, 0.)
 let model1 = model (6000., -4.5)
 
 Chart.Combine [
