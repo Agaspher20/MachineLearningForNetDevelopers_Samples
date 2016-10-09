@@ -35,3 +35,26 @@ let batch rate iters (observations:Observation seq) =
         else
             search (batchUpdate rate (t0,t1) observations) (i-1)
     search (0.0,0.0) iters
+
+let model (theta0, theta1) (obs:Observation) = 
+    theta0 + theta1 * (float obs.Instant)
+
+type Model = Observation -> float
+
+let cost (observations:Observation seq) (model:Model) = 
+    observations
+    |> Seq.sumBy (fun x -> pown (float x.Cnt - model x) 2)
+    |> sqrt
+
+let overallCost = cost data
+
+let batched_error rate =
+    Seq.unfold (fun (t0,t1) ->
+        let (t0',t1') = batchUpdate rate (t0,t1) data
+        let err = model (t0,t1) |> overallCost
+        Some(err, (t0',t1'))) (0.0,0.0)
+    |> Seq.take 100
+    |> Seq.toList
+    |> Chart.Line
+
+batched_error 0.000001
