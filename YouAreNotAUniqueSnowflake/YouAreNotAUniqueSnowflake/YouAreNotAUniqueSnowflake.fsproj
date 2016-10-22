@@ -54,6 +54,7 @@
     <None Include="Script.fsx" />
     <Content Include="packages.config" />
     <Compile Include="KMeans.fs" />
+    <None Include="TagsClusterisation.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Charting">
