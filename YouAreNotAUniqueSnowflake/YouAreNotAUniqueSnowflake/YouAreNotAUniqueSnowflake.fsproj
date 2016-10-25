@@ -57,6 +57,7 @@
     <None Include="TagsClusterisation.fsx" />
     <Compile Include="PrincipalComponentAnalysis.fs" />
     <None Include="PrincipalComponentAnalysis.fsx" />
+    <None Include="TagsRecommender.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Charting">
