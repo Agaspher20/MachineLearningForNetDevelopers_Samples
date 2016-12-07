@@ -50,3 +50,26 @@
                 | None -> labelForMissingValues
                 | Some(predictedLabel) -> predictedLabel
         classifier
+
+    let entropy data =
+        let size = data |> Seq.length
+
+        data
+        |> Seq.countBy id
+        |> Seq.map (fun (_,count) -> float count / float size)
+        |> Seq.sumBy (fun f -> if f > 0. then - f * log f else 0.)
+
+    let splitEntropy extractLabel extractFeature data =
+        // observations with no missing values
+        // for the selected feature
+        let dataWithValues =
+            data
+            |> Seq.filter (extractFeature |> hasData)
+        let size = dataWithValues |> Seq.length
+        dataWithValues
+        |> Seq.groupBy extractFeature
+        |> Seq.sumBy (fun (_,group) ->
+            let groupSize = group |> Seq.length
+            let probaGroup = float groupSize / float size
+            let groupEntropy = group |> Seq.map extractLabel |> entropy
+            probaGroup * groupEntropy)

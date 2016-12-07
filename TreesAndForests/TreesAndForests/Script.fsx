@@ -54,12 +54,12 @@ let validate (featureName:string) classifier (rows:seq<Passenger>) =
 
 
 let sex (p:Passenger) = p.Sex
-let sexClassifier = survived |> learn (dataset.Rows) sex
+let sexClassifier = learn dataset.Rows sex survived
 
 dataset.Rows |> validate "passenger sex" sexClassifier
 
 let classFeature (p:Passenger) = p.Pclass
-let classClassifier = learn (dataset.Rows) classFeature survived
+let classClassifier = learn dataset.Rows classFeature survived
 
 dataset.Rows |> validate "passenger class" classClassifier
 
@@ -90,3 +90,22 @@ let port (p:Passenger) =
 let portClassifier = survived |> betterLearn (dataset.Rows) port
 
 dataset.Rows |> validate "embarked port" portClassifier
+
+let age (p:Passenger) =
+    if p.Age < 12.0
+    then Some("Younger")
+    else Some("Older")
+let someSex (p:Passenger) = Some(p.Sex)
+let pclass (p:Passenger) = Some(p.Pclass)
+
+printfn "Comparison: most informative feature"
+let h =
+    dataset.Rows
+    |> Seq.map survived
+    |> entropy
+printfn "Base entropy %.3f" h 
+
+dataset.Rows |> splitEntropy survived someSex |> printfn "  Sex: %.3f"
+dataset.Rows |> splitEntropy survived pclass |> printfn "  Class: %.3f"
+dataset.Rows |> splitEntropy survived port |> printfn "  Port: %.3f"
+dataset.Rows |> splitEntropy survived age |> printfn "  Age: %.3f"
