@@ -51,9 +51,11 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="DecisionStump.fs" />
+    <Compile Include="Tree.fs" />
     <None Include="Script.fsx" />
     <Content Include="packages.config" />
-    <Compile Include="DecisionStump.fs" />
+    <None Include="TreeDecision.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Data">
