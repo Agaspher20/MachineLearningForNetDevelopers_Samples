@@ -96,7 +96,10 @@ let age (p:Passenger) =
     then Some("Younger")
     else Some("Older")
 let someSex (p:Passenger) = Some(p.Sex)
-let pclass (p:Passenger) = Some(p.Pclass)
+let pclass (p:Passenger) = Some(p.Pclass |> string)
+
+#load "Tree.fs"
+open Tree
 
 printfn "Comparison: most informative feature"
 let h =
@@ -109,3 +112,35 @@ dataset.Rows |> splitEntropy survived someSex |> printfn "  Sex: %.3f"
 dataset.Rows |> splitEntropy survived pclass |> printfn "  Class: %.3f"
 dataset.Rows |> splitEntropy survived port |> printfn "  Port: %.3f"
 dataset.Rows |> splitEntropy survived age |> printfn "  Age: %.3f"
+
+for (groupName, group) in bySex do
+    printfn "Group: %s" groupName
+    let h = group |> Seq.map survived |> entropy
+    printfn "Base entropy %.3f" h 
+    group |> splitEntropy survived someSex |> printfn "  Sex: %.3f"
+    group |> splitEntropy survived pclass |> printfn "  Class: %.3f"
+    group |> splitEntropy survived port |> printfn "  Port: %.3f"
+    group |> splitEntropy survived age |> printfn "  Age: %.3f" 
+
+let features = [ "Sex",someSex
+                 "Class",pclass]
+
+features
+|> List.map (fun (name, feat) ->
+    dataset.Rows
+    |> splitEntropy survived feat
+    |> printfn "%s: %.3f" name)
+
+let ages =
+    dataset.Rows
+    |> Seq.map (fun p -> p.Age)
+    |> Seq.distinct
+let best =
+    ages
+    |> Seq.minBy (fun age ->
+        let age (p:Passenger) =
+            if p.Age < age then Some("Younger") else Some("Older")
+        dataset.Rows |> splitEntropy survived age)
+
+printfn "Best age split"
+printfn "Age: %.3f" best
