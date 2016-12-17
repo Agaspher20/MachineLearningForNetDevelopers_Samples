@@ -52,7 +52,23 @@
             let groupEntropy = group |> Seq.map extractLabel |> entropy
             probaGroup * groupEntropy)
 
-    let rec growTree sample label features =
+    let entropyGainFilter sample label feature =
+        splitEntropy label feature sample - entropy sample < 0.
+
+    let leafSizeFilter minSize sample label feature =
+        sample
+        |> Seq.map feature
+        |> Seq.choose id
+        |> Seq.countBy id
+        |> Seq.forall (fun (_,groupSize) -> groupSize > minSize) 
+
+    let rec growTree filters sample label features =
+        let features =
+            features
+            |> Map.filter (fun name feature ->
+                filters
+                |> Seq.forall (fun filter -> filter sample label feature))
+
         if (Map.isEmpty features)
         // we have no feature left to split on:
         // our prediction is the most frequent
@@ -89,7 +105,7 @@
             let nextLevel =
                 branches
                 |> Seq.map (fun (value,group) ->
-                    value, growTree group label remainingFeatures)
+                    value, growTree filters group label remainingFeatures)
                 |> Map.ofSeq
 
             Stump((bestName,bestFeature), defaultValue, nextLevel)

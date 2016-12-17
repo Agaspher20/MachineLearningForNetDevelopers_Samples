@@ -20,7 +20,9 @@ let features = [
     "Class", fun p -> p.Pclass |> string |> Some
     "Age", fun p -> if p.Age < 7.0 then Some("Younger") else Some("Older")]
 
-let tree = growTree dataset.Rows label (features |> Map.ofList)
+let filters = [ entropyGainFilter; leafSizeFilter 10 ]
+
+let tree = growTree filters dataset.Rows label (features |> Map.ofList)
 
 dataset.Rows
 |> Seq.averageBy(fun p -> if p.Survived = decide tree p then 1. else 0.)
