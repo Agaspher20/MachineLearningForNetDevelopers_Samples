@@ -53,9 +53,13 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="DecisionStump.fs" />
     <Compile Include="Tree.fs" />
+    <Compile Include="KFold.fs" />
+    <Compile Include="Forest.fs" />
     <None Include="Script.fsx" />
     <Content Include="packages.config" />
     <None Include="TreeDecision.fsx" />
+    <None Include="KFoldValidation.fsx" />
+    <None Include="ForestDecision.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Data">
