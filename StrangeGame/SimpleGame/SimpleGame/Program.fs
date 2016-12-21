@@ -12,19 +12,19 @@
         
         [<EntryPoint>]
         let main argv =
-            let rec recursiveLoop (state:GameState) =
-                let updated =
+            let rec recursiveLoop (state:GameState) (brain:Brain) =
+                let (updated,brain) =
                     loop
                         state
-                        Map.empty
+                        brain
                         Game.CrudeBrain.decide
                         (fun score previousState currentState ->
                             renderScore score
                             renderPlayer previousState.Hero currentState.Hero
                             renderBoard previousState.Board currentState.Board
                             0)
-                recursiveLoop updated
+                recursiveLoop updated brain
 
-            recursiveLoop initialGameState
+            recursiveLoop initialGameState Map.empty
 
             0 // return an integer exit code
