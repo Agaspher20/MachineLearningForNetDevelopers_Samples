@@ -50,8 +50,12 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Game.fs" />
     <Compile Include="Rendering.fs" />
+    <Compile Include="CrudeBrain.fs" />
+    <Compile Include="InitialState.fs" />
+    <Compile Include="Loop.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
+    <None Include="Simulation.fsx" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

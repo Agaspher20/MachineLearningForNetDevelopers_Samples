@@ -21,9 +21,9 @@
 
         type Board = Map<Pos,Cell>
 
-        type GameState = { Board:Board; Hero:Hero; Score:int; }
-
         type Size = { Width:int; Height:int }
+
+        type GameState = { Board:Board; Hero:Hero; Score:int; Size:Size }
 
         let inline (%%%) (x:int) (y:int) =
             if x >= 0 then x%y
