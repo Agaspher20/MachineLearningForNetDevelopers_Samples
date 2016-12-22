@@ -20,11 +20,12 @@
                         Game.CrudeBrain.decide
                         (fun score previousState currentState ->
                             renderScore score
-                            renderPlayer previousState.Hero currentState.Hero
-                            renderBoard previousState.Board currentState.Board
+                            renderPlayer previousState currentState
+                            renderBoard previousState currentState
                             0)
                 recursiveLoop updated brain
 
+            prepareDisplay initialGameState
             recursiveLoop initialGameState Map.empty
 
             0 // return an integer exit code

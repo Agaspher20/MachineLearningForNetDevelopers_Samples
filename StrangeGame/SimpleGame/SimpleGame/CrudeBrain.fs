@@ -5,7 +5,7 @@
 
     module CrudeBrain =
         // My current direction and surrounding cells
-        type State = Dir * (Cell option) list
+        type State = Dir * int list
         type Experience = {
             State:State; // where I was
             Action:Act; // what I did
@@ -52,7 +52,6 @@
                     | Some(value) -> value
                     | None -> 0.0)
 
-        let tileAt (board:Board) (pos:Pos) = board.TryFind(pos)
         let offsets =
             [ (-1, -1)
               (-1, 0)
