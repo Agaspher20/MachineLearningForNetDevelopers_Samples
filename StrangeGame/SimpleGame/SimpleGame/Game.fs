@@ -54,7 +54,7 @@
 
         let applyDecision (size:Size) (action:Act) (hero:Hero) =
             let newDirection = hero.Direction |> takeDirection action
-            { Position = moveTo size newDirection hero.Position; Direction = newDirection }
+            { Position = hero.Position |> moveTo size newDirection; Direction = newDirection }
 
         let tileAt (board:Board) (pos:Pos) = board.[pos.Left, pos.Top]
 
