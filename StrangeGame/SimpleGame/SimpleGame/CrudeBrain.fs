@@ -28,6 +28,7 @@
         
         let alpha = 0.2 // learning rate
         let gamma = 0.5 // discount rate
+        let epsilon = 0.05 // random learning
 
         let nextValue (brain:Brain) (state:State) =
             choices
@@ -47,20 +48,23 @@
                 brain.Add(strategy, (alpha * (experience.Reward + gamma * vNext)))
 
         let decide (brain:Brain) (state:State) =
-            let knownStrategies =
-                choices
-                |> Array.map (fun action -> { State = state; Action = action })
-                |> Array.filter (fun strategy -> brain.ContainsKey strategy)
-            match knownStrategies.Length with
-            | 0 -> randomDecide()
-            | _ ->
-                choices
-                |> Seq.maxBy (fun action ->
-                    let strategy = { State = state; Action = action }
+            if (rng.NextDouble() < epsilon)
+            then randomDecide()
+            else
+                let knownStrategies =
+                    choices
+                    |> Array.map (fun action -> { State = state; Action = action })
+                    |> Array.filter (fun strategy -> brain.ContainsKey strategy)
+                match knownStrategies.Length with
+                | 0 -> randomDecide()
+                | _ ->
+                    choices
+                    |> Seq.maxBy (fun action ->
+                        let strategy = { State = state; Action = action }
                     
-                    match brain.TryFind strategy with
-                    | Some(value) -> value
-                    | None -> 0.0)
+                        match brain.TryFind strategy with
+                        | Some(value) -> value
+                        | None -> 0.0)
 
         let offsets =
             [ (-1, -1)
