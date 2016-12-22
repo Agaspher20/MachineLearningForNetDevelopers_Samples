@@ -25,16 +25,26 @@
 
         let choices = [| Straight; Left; Right |]
         let randomDecide() = choices.[rng.Next(3)]
-
+        
         let alpha = 0.2 // learning rate
-        let learn (brain:Brain) (exp:Experience) =
-            let strategy = { State = exp.State; Action = exp.Action }
+        let gamma = 0.5 // discount rate
+
+        let nextValue (brain:Brain) (state:State) =
+            choices
+            |> Seq.map (fun action ->
+                match brain.TryFind { State = state; Action = action } with
+                | Some (value) -> value
+                | None -> 0.)
+            |> Seq.max
+        let learn (brain:Brain) (experience:Experience) =
+            let strategy = { State = experience.State; Action = experience.Action }
+            let vNext = nextValue brain experience.NextState
 
             match brain.TryFind strategy with
             | Some(value) ->
-                brain.Add(strategy, (1.0 - alpha) * value + alpha * exp.Reward)
+                brain.Add(strategy, (1. - alpha) * value + alpha * (experience.Reward + gamma * vNext))
             | None ->
-                brain.Add(strategy, (alpha * exp.Reward))
+                brain.Add(strategy, (alpha * (experience.Reward + gamma * vNext)))
 
         let decide (brain:Brain) (state:State) =
             let knownStrategies =
