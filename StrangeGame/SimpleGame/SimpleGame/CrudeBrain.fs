@@ -5,7 +5,7 @@
 
     module CrudeBrain =
         // My current direction and surrounding cells
-        type State = Dir * int list
+        type State = int list
         type Experience = {
             State:State; // where I was
             Action:Act; // what I did
@@ -63,12 +63,18 @@
               (1, 1)
             ]
 
+        let rotate dir (x,y) =
+            match dir with
+            | North -> (x,y)
+            | South -> (-x,-y)
+            | West -> (-y,x)
+            | East -> (y,-x)
+
         let visibleState (size:Size) (board:Board) (hero:Hero) =
             let (dir,pos) = hero.Direction, hero.Position
-            let visibleCells =
-                offsets
-                |> List.map (fun (x,y) ->
-                    onboard size { Top = pos.Top + x; Left = pos.Left + y}
-                    |> tileAt board)
 
-            (dir, visibleCells)
+            offsets
+            |> List.map (rotate dir)
+            |> List.map (fun (x,y) ->
+                onboard size { Top = pos.Top + x; Left = pos.Left + y}
+                |> tileAt board)
