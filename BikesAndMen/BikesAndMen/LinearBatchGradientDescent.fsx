@@ -13,8 +13,8 @@ open MathNet.Numerics.LinearAlgebra
 open MathNet.Numerics.Providers.LinearAlgebra.Mkl
 open MathNet.Numerics.LinearAlgebra.Double
 
-System.Environment.CurrentDirectory <- Path.Combine(__SOURCE_DIRECTORY__, @"..\packages\MathNet.Numerics.MKL.Win-x86.2.1.0\build\x86")
-Control.NativeProviderPath <- Path.Combine(__SOURCE_DIRECTORY__, @"..\packages\MathNet.Numerics.MKL.Win-x86.2.1.0\build\x86")
+System.Environment.CurrentDirectory <- Path.Combine(__SOURCE_DIRECTORY__, @"..\packages\MathNet.Numerics.MKL.Win-x86.2.2.0\build\x86")
+Control.NativeProviderPath <- Path.Combine(__SOURCE_DIRECTORY__, @"..\packages\MathNet.Numerics.MKL.Win-x86.2.2.0\build\x86")
 Control.UseNativeMKL()
 Control.LinearAlgebraProvider <- MklLinearAlgebraProvider()
 
