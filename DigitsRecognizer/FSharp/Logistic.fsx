@@ -42,20 +42,49 @@ let features = 28 * 28
 let model = LogisticRegression()
 model.NumberOfInputs <- features
 
-let trainLogistic model =
+let trainLogistic model (images:float[][]) (labels:float[]) =
     let learner = LogisticGradientDescent model
-
     learner.Learn(images, labels)
 
-let trainedModel = trainLogistic model
+let trainedModel = trainLogistic model images labels
 
-let accuracy () =
+let accuracy (trainedModel:float[]->float) =
     validation
     |> Array.filter (fun (label,_) -> label = 4. || label = 9.)
     |> Array.map (fun (label,image) -> labeler label,image)
     |> Array.map (fun (label,image) ->
-        let predicted = if trainedModel.Score(image) > 0.5 then 1. else 0.
+        let predicted = if trainedModel(image) > 0.5 then 1. else 0.
         let real = label
         if predicted = real then 1. else 0.)
     |> Array.average 
-accuracy ()
+accuracy trainedModel.Score
+
+let one_vs_all training =
+    let features = 28 * 28
+    let labels = [0.0 .. 9.0]
+    let models =
+        labels
+        |> List.map (fun target -> 
+            printfn "Learning label %.0f" target
+            // create training set for target label
+            let trainingLabels,trainingFeatures =
+                training
+                |> Array.map(fun (label, features) ->
+                    if label = target
+                    then (1.,features)
+                    else (0.,features))
+                |> Array.unzip
+            // train the model
+            let model = LogisticRegression()
+            model.NumberOfInputs <- features
+            let trainedModel = trainLogistic model trainingFeatures trainingLabels
+            printfn "Learning finished for label %.0f" target
+            target,trainedModel)
+    let classifier (image:float[]) =
+        models
+        |> List.maxBy (fun (label, model) -> model.Score image)
+        |> fun (label, confidence) -> label
+    classifier
+
+let trainedOneVsAll = one_vs_all training
+accuracy trainedOneVsAll
