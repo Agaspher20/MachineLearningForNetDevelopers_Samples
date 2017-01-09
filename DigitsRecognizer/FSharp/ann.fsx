@@ -22,7 +22,7 @@ let trainNetwork (epochs:int) =
     let features = 28*28
     let labels,images = nnRead "trainingsample.csv" |> Array.unzip
     let learningLabels = Jagged.OneHot(labels)
-    let network = ActivationNetwork(BipolarSigmoidFunction(), features, [| 100; 10 |])
+    let network = ActivationNetwork(SigmoidFunction(), features, [| 100; 10 |])
 
     NguyenWidrow(network).Randomize()
 
