@@ -5,6 +5,7 @@
 #r @"Accord.Statistics.3.3.0\lib\net45\Accord.Statistics.dll"
 
 open Accord.Statistics
+open Accord.Math
 open Accord.Neuro
 open Accord.Neuro.Learning
 
@@ -20,7 +21,7 @@ let nnRead fileName =
 let trainNetwork (epochs:int) =
     let features = 28*28
     let labels,images = nnRead "trainingsample.csv" |> Array.unzip
-    let learningLabels = Tools.Expand(labels, -1.0, 1.0)
+    let learningLabels = Jagged.OneHot(labels)
     let network = ActivationNetwork(BipolarSigmoidFunction(), features, [| 100; 10 |])
 
     NguyenWidrow(network).Randomize()
