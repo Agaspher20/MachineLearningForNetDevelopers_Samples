@@ -64,6 +64,7 @@
     <Content Include="packages.config" />
     <None Include="Logistic.fsx" />
     <None Include="svm.fsx" />
+    <None Include="ann.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Accord">
