@@ -1,8 +1,8 @@
 ﻿#I @"..\packages\"
-#r @"Accord.3.3.0\lib\net45\Accord.dll"
-#r @"Accord.Math.3.3.0\lib\net45\Accord.Math.dll"
-#r @"Accord.Neuro.3.3.0\lib\net45\Accord.Neuro.dll"
-#r @"Accord.Statistics.3.3.0\lib\net45\Accord.Statistics.dll"
+#r @"Accord.3.4.0\lib\net45\Accord.dll"
+#r @"Accord.Math.3.4.0\lib\net45\Accord.Math.dll"
+#r @"Accord.Neuro.3.4.0\lib\net45\Accord.Neuro.dll"
+#r @"Accord.Statistics.3.4.0\lib\net45\Accord.Statistics.dll"
 
 open Accord.Statistics
 open Accord.Math
